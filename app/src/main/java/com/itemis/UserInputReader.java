@@ -31,7 +31,7 @@ public class UserInputReader {
             if (line.equalsIgnoreCase("exit")) {
                 break;
             }
-            inputHandler.handleUserInput();
+            inputHandler.handleUserInput(line);
         }
         scanner.close();
         resultDisplayer.displayResult();

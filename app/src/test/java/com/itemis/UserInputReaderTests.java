@@ -1,12 +1,14 @@
 package com.itemis;
 
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import static org.mockito.Mockito.*;
@@ -16,7 +18,7 @@ public class UserInputReaderTests {
 
     @Mock
     private Scanner scanner;
-    @Mock
+
     private UserInputHandler userInputHandler;
     @Mock
     private ResultDisplayer resultDisplayer;
@@ -24,6 +26,13 @@ public class UserInputReaderTests {
     private PrintStream consoleOutput;
     @InjectMocks
     private UserInputReader userInputReader;
+
+    @BeforeEach
+    private void beforeEach(){
+        userInputHandler = new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new HashMap<String, Integer>(), new GalacticRomanRepository(), new RomanToCreditsCalculator(), new RomanExpressionBuilder( new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator());
+
+    }
+
 
 
     @Test
@@ -52,13 +61,19 @@ public class UserInputReaderTests {
         verify(this.consoleOutput, times(1)).println("Type in your Galactic notes. Type 'exit' when you are done!");
     }
 
-    @Test
+    /*@Test
     public void whenUserInputIsValid_ShouldCallUserInputHandler(){
         when(this.scanner.hasNextLine()).thenReturn(true);
         when(this.scanner.nextLine()).thenReturn("blob is I").thenReturn("exit");
         userInputReader.readUserInput();
-        verify(this.userInputHandler, times(1)).handleUserInput();
-    }
+        verify(this.userInputHandler, times(1)).handleUserInput("blob is I");
+
+    }*/
+
+    //Instanciar um userinputhandler e o reader
+    // when(this.scanner.nextLine()).thenReturn("blob is I").thenReturn("exit");
+    //userInputReader.readUserInput();
+    //No Galactic Roman Repository verificar se ficou guardado
 
     @Test
     public void whenConsoleIsClosed_ShouldCallTranslationResults(){

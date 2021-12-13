@@ -4,12 +4,16 @@
 package com.itemis;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class App {
 
     public static void main(String[] args) {
-        UserInputReader input = new UserInputReader(new Scanner(System.in), new UserInputHandler(), new ResultDisplayer(), new PrintStream(System.out));
+        UserInputReader input = new UserInputReader(new Scanner(System.in),
+                new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new HashMap<String, Integer>(), new GalacticRomanRepository(), new RomanToCreditsCalculator(), new RomanExpressionBuilder(new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator()),
+                new ResultDisplayer(),
+                new PrintStream(System.out));
         input.readUserInput();
     }
 }
