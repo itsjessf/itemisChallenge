@@ -2,19 +2,21 @@ package com.itemis;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RomanToCreditsCalculatorTests {
 
     private RomanToCreditsCalculator romanToCreditsCalculator;
-    private PrintStream consoleOutput;
 
     @BeforeEach
-    private void beforeEach() {
+    public void beforeEach() {
         romanToCreditsCalculator = new RomanToCreditsCalculator();
     }
 

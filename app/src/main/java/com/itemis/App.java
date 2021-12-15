@@ -10,8 +10,19 @@ import java.util.Scanner;
 public class App {
 
     public static void main(String[] args) {
-        UserInputReader input = new UserInputReader(new Scanner(System.in),
-                new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new HashMap<String, Integer>(), new GalacticRomanRepository(), new RomanToCreditsCalculator(), new RomanExpressionBuilder(new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator()),
+
+
+        MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
+                new RomanToCreditsCalculator(),
+                new RomanExpressionBuilder(new GalacticRomanRepository())
+                );
+        UserInputHandler userInputHandler = new UserInputHandler(
+                new GalacticRomanRepository(),
+                metalCreditsRepository,
+                new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator( new RomanExpressionBuilder( new GalacticRomanRepository()), new RomanToCreditsCalculator()));
+        UserInputReader input = new UserInputReader(
+                new Scanner(System.in),
+                userInputHandler,
                 new ResultDisplayer(),
                 new PrintStream(System.out));
         input.readUserInput();

@@ -29,7 +29,7 @@ public class UserInputReaderTests {
 
     @BeforeEach
     private void beforeEach(){
-        userInputHandler = new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new HashMap<String, Integer>(), new GalacticRomanRepository(), new RomanToCreditsCalculator(), new RomanExpressionBuilder( new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator());
+        userInputHandler = new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new RomanToCreditsCalculator(), new RomanExpressionBuilder( new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator( new RomanExpressionBuilder(new GalacticRomanRepository()), new RomanToCreditsCalculator()));
 
     }
 

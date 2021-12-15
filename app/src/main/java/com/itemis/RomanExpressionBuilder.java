@@ -9,9 +9,10 @@ public class RomanExpressionBuilder {
 
     public String[] buildRomanExpression(String[] galacticValues){
         String[] romanExpression = new String[galacticValues.length];
-        for(int i=0; i< galacticValues.length-1; i++){
+        for(int i=0; i< galacticValues.length; i++){
             romanExpression[i] = (galacticRomanRepository.getGalacticRomanValues(galacticValues[i]));
         }
+
         return romanExpression;
     }
 }
