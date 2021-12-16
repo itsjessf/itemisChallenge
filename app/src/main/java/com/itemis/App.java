@@ -4,7 +4,6 @@
 package com.itemis;
 
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class App {
@@ -12,19 +11,42 @@ public class App {
     public static void main(String[] args) {
 
 
+        RomanExpressionBuilder romanExpressionBuilder = new RomanExpressionBuilder(
+                new GalacticRomanRepository());
+
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
                 new RomanToCreditsCalculator(),
-                new RomanExpressionBuilder(new GalacticRomanRepository())
-                );
+                romanExpressionBuilder);
+
+        MetalToCreditsCalculator metalToCreditsCalculator = new MetalToCreditsCalculator(
+                new RomanToCreditsCalculator(),
+                romanExpressionBuilder, metalCreditsRepository);
+
+        GalacticToCreditsCalculator galacticToCreditsCalculator = new GalacticToCreditsCalculator(
+                romanExpressionBuilder,
+                new RomanToCreditsCalculator());
+
+        GalacticToCreditsResultRepository galacticToCreditsResultRepository = new GalacticToCreditsResultRepository(galacticToCreditsCalculator);
+
+        MetalToCreditsResultRepository metalToCreditsResultRepository = new MetalToCreditsResultRepository(metalToCreditsCalculator);
+
+        ResultDisplayer resultDisplayer = new ResultDisplayer(galacticToCreditsResultRepository, metalToCreditsResultRepository);
+
+        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(resultDisplayer);
+
         UserInputHandler userInputHandler = new UserInputHandler(
                 new GalacticRomanRepository(),
                 metalCreditsRepository,
-                new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator( new RomanExpressionBuilder( new GalacticRomanRepository()), new RomanToCreditsCalculator()));
-        UserInputReader input = new UserInputReader(
+                galacticToCreditsResultRepository,
+                metalToCreditsResultRepository,
+                invalidQueryHandler);
+
+        UserInputReader userInputReader = new UserInputReader(
                 new Scanner(System.in),
                 userInputHandler,
-                new ResultDisplayer(),
+                resultDisplayer,
                 new PrintStream(System.out));
-        input.readUserInput();
+
+        userInputReader.readUserInput();
     }
 }

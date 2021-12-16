@@ -1,5 +1,6 @@
 package com.itemis;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -27,12 +28,35 @@ public class UserInputReaderTests {
     @InjectMocks
     private UserInputReader userInputReader;
 
-    @BeforeEach
-    private void beforeEach(){
-        userInputHandler = new UserInputHandler(new GalacticRomanRepository(), new MetalCreditsRepository(new RomanToCreditsCalculator(), new RomanExpressionBuilder( new GalacticRomanRepository())), new RomanToCreditsCalculator(), new MetalToCreditsCalculator(), new GalacticToCreditsCalculator( new RomanExpressionBuilder(new GalacticRomanRepository()), new RomanToCreditsCalculator()));
+    @Before
+    public void beforeEach() {
+        RomanExpressionBuilder romanExpressionBuilder = new RomanExpressionBuilder(
+                new GalacticRomanRepository());
 
+        MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
+                new RomanToCreditsCalculator(),
+                romanExpressionBuilder);
+
+        GalacticToCreditsCalculator galacticToCreditsCalculator = new GalacticToCreditsCalculator(
+                romanExpressionBuilder,
+                new RomanToCreditsCalculator());
+
+        MetalToCreditsCalculator metalToCreditsCalculator = new MetalToCreditsCalculator(
+                new RomanToCreditsCalculator(),
+                romanExpressionBuilder, metalCreditsRepository);
+        GalacticToCreditsResultRepository galacticToCreditsResultRepository = new GalacticToCreditsResultRepository(galacticToCreditsCalculator);
+
+        MetalToCreditsResultRepository metalToCreditsResultRepository = new MetalToCreditsResultRepository(metalToCreditsCalculator);
+
+        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(new ResultDisplayer(galacticToCreditsResultRepository, metalToCreditsResultRepository));
+
+        userInputHandler = new UserInputHandler(
+                new GalacticRomanRepository(),
+                metalCreditsRepository,
+                galacticToCreditsResultRepository,
+                metalToCreditsResultRepository,
+                invalidQueryHandler);
     }
-
 
 
     @Test
@@ -46,7 +70,7 @@ public class UserInputReaderTests {
     }
 
     @Test
-    public void whenUserInsertsEmptyInput_ShouldReturnMessage(){
+    public void whenUserInsertsEmptyInput_ShouldReturnMessage() {
         when(this.scanner.hasNextLine()).thenReturn(true);
         when(this.scanner.nextLine()).thenReturn("").thenReturn("exit");
         userInputReader.readUserInput();
@@ -54,7 +78,7 @@ public class UserInputReaderTests {
     }
 
     @Test
-    public void whenUserInsertsSpaces_ShouldReturnMessage(){
+    public void whenUserInsertsSpaces_ShouldReturnMessage() {
         when(this.scanner.hasNextLine()).thenReturn(true);
         when(this.scanner.nextLine()).thenReturn("           ").thenReturn("exit");
         userInputReader.readUserInput();
@@ -76,7 +100,7 @@ public class UserInputReaderTests {
     //No Galactic Roman Repository verificar se ficou guardado
 
     @Test
-    public void whenConsoleIsClosed_ShouldCallTranslationResults(){
+    public void whenConsoleIsClosed_ShouldCallTranslationResults() {
         when(this.scanner.hasNextLine()).thenReturn(true);
         when(this.scanner.nextLine()).thenReturn("exit");
         userInputReader.readUserInput();

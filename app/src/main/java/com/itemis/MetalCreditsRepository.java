@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MetalCreditsRepository {
-    private static final Map<String, Integer> metalCredits = new HashMap<>();
+    private static final Map<String, Float> metalCredits = new HashMap<>();
     private final RomanToCreditsCalculator romanToCreditsCalculator;
     private final RomanExpressionBuilder romanExpressionBuilder;
 
@@ -20,16 +20,16 @@ public class MetalCreditsRepository {
         metalCredits.put(metal, calculateMetalCredits(userInputElements));
     }
 
-    private int calculateMetalCredits(String[] userInputElements){
+    private float calculateMetalCredits(String[] userInputElements){
         String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements, 0, userInputElements.length-4));
 
         int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
         int metalValue = Integer.parseInt(userInputElements[userInputElements.length-2]);
 
-        return metalValue/metalQuantity;
+        return (float)metalValue/metalQuantity;
     }
 
-    public int getMetalCredits( String metal) {
+    public Float getMetalCredits( String metal) {
         return metalCredits.get(metal);
     }
 }

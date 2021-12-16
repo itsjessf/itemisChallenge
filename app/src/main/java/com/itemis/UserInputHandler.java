@@ -6,16 +6,21 @@ public class UserInputHandler {
 
     private final GalacticRomanRepository galacticRomanRepository;
     private final MetalCreditsRepository metalCreditsRepository;
-    private final RomanToCreditsCalculator romanToCreditsCalculator;
-    private final MetalToCreditsCalculator metalToCreditsCalculator;
-    private final GalacticToCreditsCalculator galacticToCreditsCalculator;
+    private final GalacticToCreditsResultRepository galacticToCreditsResultRepository;
+    private final MetalToCreditsResultRepository metalToCreditsResultRepository;
+    private final InvalidQueryHandler invalidQueryHandler;
 
-    public UserInputHandler(GalacticRomanRepository galacticRomanRepository, MetalCreditsRepository metalCreditsRepository, RomanToCreditsCalculator romanToCreditsCalculator, MetalToCreditsCalculator metalToCreditsCalculator, GalacticToCreditsCalculator galacticToCreditsCalculator) {
+    public UserInputHandler(GalacticRomanRepository galacticRomanRepository,
+                            MetalCreditsRepository metalCreditsRepository,
+                            GalacticToCreditsResultRepository galacticToCreditsResultRepository,
+                            MetalToCreditsResultRepository metalToCreditsResultRepository,
+                            InvalidQueryHandler invalidQueryHandler) {
+
         this.galacticRomanRepository = galacticRomanRepository;
         this.metalCreditsRepository = metalCreditsRepository;
-        this.romanToCreditsCalculator = romanToCreditsCalculator;
-        this.metalToCreditsCalculator = metalToCreditsCalculator;
-        this.galacticToCreditsCalculator = galacticToCreditsCalculator;
+        this.galacticToCreditsResultRepository = galacticToCreditsResultRepository;
+        this.metalToCreditsResultRepository = metalToCreditsResultRepository;
+        this.invalidQueryHandler = invalidQueryHandler;
     }
 
     public void handleUserInput(String userInput) {
@@ -23,22 +28,22 @@ public class UserInputHandler {
         if(hasMatchingRegex("^\\w+ is [IVXLCDM]$", userInput)){
             this.galacticRomanRepository.storeGalacticRomanValues(userInput);
 
-        }else if (hasMatchingRegex("is \\d+ Credits", userInput)){
+        }else if (hasMatchingRegex(" is \\d+ Credits$", userInput)){
             this.metalCreditsRepository.storeMetalCreditValues(userInput);
 
-        }else if (hasMatchingRegex("^How much is", userInput)){
-            this.galacticToCreditsCalculator.calculateGalacticToCredits(userInput);
+        }else if (hasMatchingRegex("^How much is ", userInput)){
+            this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
 
-        }else if (hasMatchingRegex("^How many Credits is", userInput)){
-            this.metalToCreditsCalculator.calculateMetalToCredits(userInput);
+        }else if (hasMatchingRegex("^How many Credits is ", userInput)){
+            this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
 
         }else{
-            System.out.println("The note provided is not valid");
+            this.invalidQueryHandler.addInvalidQueryToResult();
         }
     }
 
     public boolean hasMatchingRegex (String regex, String sentence){
-        return Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(sentence).matches();
+        return Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(sentence).find();
     }
 
     // if two words separated by "is"

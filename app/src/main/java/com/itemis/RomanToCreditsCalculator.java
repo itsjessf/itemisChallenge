@@ -37,20 +37,18 @@ public class RomanToCreditsCalculator {
                     //Next value is lower
                     result = result + romanToCreditsMap.get(romanExpression[i]);
                 } else if (romanToCreditsMap.get(romanExpression[i]) == romanToCreditsMap.get(romanExpression[i + 1]) && isValueRepeatable(romanExpression[i]) && !isForthIteration(romanExpression, i)) {
-                    //result = result + incrementValue(romanExpression, i);
-                    //i = i + 1;
+                    //Next value is the same
                     result = result + romanToCreditsMap.get(romanExpression[i]);
-                } else {//String is not valid
+                } else {
+                    //String is not valid
                     System.out.println("The Roman Expression provided is not valid");
                     return 0;
                 }
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("The array ended");
                 break;
             }
         }
-        System.out.println(result);
         return result;
     }
 
@@ -73,17 +71,6 @@ public class RomanToCreditsCalculator {
 
     private static int subtractValue(String[] romanExpression, int i) {
         return (romanToCreditsMap.get(romanExpression[i + 1])) - (romanToCreditsMap.get(romanExpression[i]));
-    }
-
-    private static int incrementValue(String[] romanExpression, int i) {
-        /*int result = 0;
-        try {
-            result = result + ((romanToCreditsMap.get(romanExpression[i])));
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Array out of bounds");
-        }*/
-        return (romanToCreditsMap.get(romanExpression[i + 1])) + (romanToCreditsMap.get(romanExpression[i]));
     }
 
     private static boolean isForthIteration(String[] romanExpression, int i) {

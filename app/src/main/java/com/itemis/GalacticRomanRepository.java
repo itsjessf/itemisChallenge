@@ -11,7 +11,6 @@ public class GalacticRomanRepository {
     public void storeGalacticRomanValues(String userInput) {
         String[] userInputElements = userInput.split(" ");
         galacticRomanValues.put(userInputElements[0], userInputElements[2]);
-        System.out.println(galacticRomanValues);
     }
 
     public String getGalacticRomanValues( String galacticWord) {

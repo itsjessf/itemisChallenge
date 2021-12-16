@@ -12,10 +12,8 @@ public class GalacticToCreditsCalculator {
         this.romanToCreditsCalculator = romanToCreditsCalculator;
     }
 
-    public int calculateGalacticToCredits(String userInput){
-        String[] userInputElements = userInput.split(" ");
-        String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements,userInputElements.length+2, userInputElements.length));
+    public int calculateGalacticToCredits(String[] userInputElements){
+        String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements,3, userInputElements.length));
         return romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
-
     }
 }
