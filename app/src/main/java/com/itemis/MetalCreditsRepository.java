@@ -14,22 +14,13 @@ public class MetalCreditsRepository {
         this.romanExpressionBuilder = romanExpressionBuilder;
     }
 
-    public void storeMetalCreditValues(String userInput) {
-        String[] userInputElements = userInput.split(" ");
-        String metal = userInputElements[userInputElements.length-4];
-        metalCredits.put(metal, calculateMetalCredits(userInputElements));
+    public void storeMetalCreditValues(String metal, float credits) {
+        metalCredits.put(metal, credits);
     }
 
-    private float calculateMetalCredits(String[] userInputElements){
-        String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements, 0, userInputElements.length-4));
 
-        int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
-        int metalValue = Integer.parseInt(userInputElements[userInputElements.length-2]);
 
-        return (float)metalValue/metalQuantity;
-    }
-
-    public Float getMetalCredits( String metal) {
+    public float getMetalCredits( String metal) {
         return metalCredits.get(metal);
     }
 }

@@ -16,7 +16,7 @@ public class RomanToCreditsCalculator {
 
     }};
 
-    public static int calculateRomanToCredits(String[] romanExpression) {
+    public int calculateRomanToCredits(String[] romanExpression) {
 
         int result = 0;
         int i = 0;

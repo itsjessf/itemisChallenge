@@ -8,9 +8,8 @@ public class GalacticRomanRepository {
     private static final Map<String, String> galacticRomanValues = new HashMap<>();
 
 
-    public void storeGalacticRomanValues(String userInput) {
-        String[] userInputElements = userInput.split(" ");
-        galacticRomanValues.put(userInputElements[0], userInputElements[2]);
+    public void storeGalacticRomanValues(String galacticValue, String romanValue) {
+        galacticRomanValues.put(galacticValue, romanValue);
     }
 
     public String getGalacticRomanValues( String galacticWord) {

@@ -1,7 +1,6 @@
 package com.itemis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GalacticToCreditsResultRepository {
 
@@ -14,13 +13,20 @@ public class GalacticToCreditsResultRepository {
 
     public void storeGalacticToCreditsResult (String userInput){
         String[] userInputElements = userInput.split(" ");
+        galacticToCreditsResult.add(resultStringBuilder(userInput, calculateGalacticCreditsValue(userInputElements)));
+    }
+
+    private int calculateGalacticCreditsValue(String[] userInput){
+        return galacticToCreditsCalculator.calculateGalacticToCredits(userInput);
+    }
+
+    private String resultStringBuilder (String userInput, int result){
+        String[] userInputElements = userInput.split(" ");
         StringBuilder builder = new StringBuilder();
         for(int i = 3; i< userInputElements.length; i++){
             builder.append(userInputElements[i]).append(" ");
         }
-        String str = builder.toString();
-        int result = galacticToCreditsCalculator.calculateGalacticToCredits(userInputElements);
-        galacticToCreditsResult.add(str.concat("is ").concat(String.valueOf(result)));
+        return builder.toString().concat("is ").concat(String.valueOf(result));
     }
 
     public ArrayList<String> getGalacticToCreditsResult() {

@@ -39,7 +39,9 @@ public class App {
                 metalCreditsRepository,
                 galacticToCreditsResultRepository,
                 metalToCreditsResultRepository,
-                invalidQueryHandler);
+                invalidQueryHandler,
+                romanExpressionBuilder,
+                new RomanToCreditsCalculator());
 
         UserInputReader userInputReader = new UserInputReader(
                 new Scanner(System.in),

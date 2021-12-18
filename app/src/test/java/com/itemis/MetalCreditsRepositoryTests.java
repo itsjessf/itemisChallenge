@@ -20,22 +20,22 @@ public class MetalCreditsRepositoryTests {
     @Before
     public void beforeEach() {
         GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
-        galacticRomanRepository.storeGalacticRomanValues("glob is I");
-        galacticRomanRepository.storeGalacticRomanValues("prok is V");
-        galacticRomanRepository.storeGalacticRomanValues("pish is X");
-        galacticRomanRepository.storeGalacticRomanValues("tegj is L");
-        galacticRomanRepository.storeGalacticRomanValues("cento is C");
-        galacticRomanRepository.storeGalacticRomanValues("daemos is D");
-        galacticRomanRepository.storeGalacticRomanValues("mili is M");
+        galacticRomanRepository.storeGalacticRomanValues("glob","I");
+        galacticRomanRepository.storeGalacticRomanValues("prok","V");
+        galacticRomanRepository.storeGalacticRomanValues("pish","X");
+        galacticRomanRepository.storeGalacticRomanValues("tegj","L");
+        galacticRomanRepository.storeGalacticRomanValues("cento","C");
+        galacticRomanRepository.storeGalacticRomanValues("daemos","D");
+        galacticRomanRepository.storeGalacticRomanValues("mili","M");
         romanExpressionBuilder = new RomanExpressionBuilder(galacticRomanRepository);
         metalCreditsRepository = new MetalCreditsRepository(romanToCreditsCalculator, romanExpressionBuilder);
     }
 
     @Test
     public void whenUserInputsISValid_StoreMetalCreditValue() {
-        metalCreditsRepository.storeMetalCreditValues("glob glob Silver is 20 Credits");
+        metalCreditsRepository.storeMetalCreditValues("Silver" ,10 );
         assertEquals(10, metalCreditsRepository.getMetalCredits("Silver"));
-        metalCreditsRepository.storeMetalCreditValues("cento pish pish Gold is 240 Credits");
+        metalCreditsRepository.storeMetalCreditValues("Gold",2);
         assertEquals(2, metalCreditsRepository.getMetalCredits("Gold"));
     }
 }

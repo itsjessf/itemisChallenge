@@ -3,14 +3,10 @@ package com.itemis;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RomanExpressionBuilderTests {
@@ -20,13 +16,13 @@ public class RomanExpressionBuilderTests {
     @Before
     public void beforeEach() {
         GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
-        galacticRomanRepository.storeGalacticRomanValues("glob is I");
-        galacticRomanRepository.storeGalacticRomanValues("prok is V");
-        galacticRomanRepository.storeGalacticRomanValues("pish is X");
-        galacticRomanRepository.storeGalacticRomanValues("tegj is L");
-        galacticRomanRepository.storeGalacticRomanValues("cento is C");
-        galacticRomanRepository.storeGalacticRomanValues("daemos is D");
-        galacticRomanRepository.storeGalacticRomanValues("mili is M");
+        galacticRomanRepository.storeGalacticRomanValues("glob" , "I");
+        galacticRomanRepository.storeGalacticRomanValues("prok","V");
+        galacticRomanRepository.storeGalacticRomanValues("pish","X");
+        galacticRomanRepository.storeGalacticRomanValues("tegj","L");
+        galacticRomanRepository.storeGalacticRomanValues("cento","C");
+        galacticRomanRepository.storeGalacticRomanValues("daemos","D");
+        galacticRomanRepository.storeGalacticRomanValues("mili","M");
         romanExpressionBuilder = new RomanExpressionBuilder(galacticRomanRepository);
     }
 
