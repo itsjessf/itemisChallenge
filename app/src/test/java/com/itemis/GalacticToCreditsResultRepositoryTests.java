@@ -11,7 +11,7 @@ public class GalacticToCreditsResultRepositoryTests {
 
     @Before
     public void beforeEach(){
-        galacticToCreditsResultRepository = new GalacticToCreditsResultRepository( new GalacticToCreditsCalculator( new RomanExpressionBuilder( new GalacticRomanRepository()), new RomanToCreditsCalculator()));
+        galacticToCreditsResultRepository = new GalacticToCreditsResultRepository( new GalacticToCreditsCalculator( new GalacticToRomanExpressionMapper( new GalacticRomanRepository()), new RomanToCreditsCalculator()));
     }
 
     @Test

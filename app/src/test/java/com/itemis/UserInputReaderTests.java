@@ -2,7 +2,6 @@ package com.itemis;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,7 +28,7 @@ public class UserInputReaderTests {
 
     @Before
     public void beforeEach() {
-        RomanExpressionBuilder romanExpressionBuilder = new RomanExpressionBuilder(
+        GalacticToRomanExpressionMapper romanExpressionBuilder = new GalacticToRomanExpressionMapper(
                 new GalacticRomanRepository());
 
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(

@@ -1,6 +1,7 @@
 package com.itemis;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class UserInputHandler {
@@ -10,16 +11,18 @@ public class UserInputHandler {
     private final GalacticToCreditsResultRepository galacticToCreditsResultRepository;
     private final MetalToCreditsResultRepository metalToCreditsResultRepository;
     private final InvalidQueryHandler invalidQueryHandler;
-    private final RomanExpressionBuilder romanExpressionBuilder;
+    private final GalacticToRomanExpressionMapper romanExpressionBuilder;
     private final RomanToCreditsCalculator romanToCreditsCalculator;
+    private final MetalService metalService;
 
     public UserInputHandler(GalacticRomanRepository galacticRomanRepository,
                             MetalCreditsRepository metalCreditsRepository,
                             GalacticToCreditsResultRepository galacticToCreditsResultRepository,
                             MetalToCreditsResultRepository metalToCreditsResultRepository,
                             InvalidQueryHandler invalidQueryHandler,
-    RomanExpressionBuilder romanExpressionBuilder,
-                            RomanToCreditsCalculator romanToCreditsCalculator) {
+    GalacticToRomanExpressionMapper romanExpressionBuilder,
+                            RomanToCreditsCalculator romanToCreditsCalculator,
+    MetalService metalService) {
 
         this.galacticRomanRepository = galacticRomanRepository;
         this.metalCreditsRepository = metalCreditsRepository;
@@ -28,33 +31,42 @@ public class UserInputHandler {
         this.invalidQueryHandler = invalidQueryHandler;
         this.romanExpressionBuilder = romanExpressionBuilder;
         this.romanToCreditsCalculator = romanToCreditsCalculator;
+        this.metalService = metalService;
     }
 
     public void handleUserInput(String userInput) {
 
-        if (hasMatchingRegex("^\\w+ is [IVXLCDM]$", userInput)) {
-            String[] userInputElements = userInput.split(" ");
-            this.galacticRomanRepository.storeGalacticRomanValues(userInputElements[0], userInputElements[2]);
-            return;
+        try {
+            if (hasMatchingRegex("^\\w+ is [IVXLCDM]$", userInput)) {
+                String[] userInputElements = userInput.split(" ");
+                this.galacticRomanRepository.storeGalacticRomanValues(userInputElements[0], userInputElements[2]);
+                return;
+            }
+
+            if (hasMatchingRegex(" is \\d+ Credits$", userInput)) {
+                String[] userInputElements = userInput.split(" ");
+                String metal = userInputElements[userInputElements.length - 4];
+                metalService.x(Collections.singletonList("glob"), "Silver", 2);
+                this.metalCreditsRepository.storeMetalCreditValues(metal, calculateMetalCredits(userInputElements));
+                return;
+            }
+
+            if (hasMatchingRegex("^How much is ", userInput)) {
+                this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
+                return;
+            }
+
+            if (hasMatchingRegex("^How many Credits is ", userInput)) {
+                this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
+                return;
+            }
+            throw new HandledException();
+
+        } catch(HandledException exception){
+            //Add to answers repository exception.getMessage()
+            this.invalidQueryHandler.addInvalidQueryToResult(exception.getMessage());
         }
 
-        if (hasMatchingRegex(" is \\d+ Credits$", userInput)) {
-            String[] userInputElements = userInput.split(" ");
-            String metal = userInputElements[userInputElements.length-4];
-            this.metalCreditsRepository.storeMetalCreditValues(metal, calculateMetalCredits(userInputElements) );
-            return;
-        }
-
-        if (hasMatchingRegex("^How much is ", userInput)) {
-            this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
-            return;
-        }
-
-        if (hasMatchingRegex("^How many Credits is ", userInput)) {
-            this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
-            return;
-        }
-        this.invalidQueryHandler.addInvalidQueryToResult();
 
     }
 

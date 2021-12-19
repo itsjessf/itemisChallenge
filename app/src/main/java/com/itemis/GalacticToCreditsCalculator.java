@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public class GalacticToCreditsCalculator {
 
-    private final RomanExpressionBuilder romanExpressionBuilder;
+    private final GalacticToRomanExpressionMapper romanExpressionBuilder;
     private final RomanToCreditsCalculator romanToCreditsCalculator;
 
-    public GalacticToCreditsCalculator(RomanExpressionBuilder romanExpressionBuilder, RomanToCreditsCalculator romanToCreditsCalculator) {
+    public GalacticToCreditsCalculator(GalacticToRomanExpressionMapper romanExpressionBuilder, RomanToCreditsCalculator romanToCreditsCalculator) {
         this.romanExpressionBuilder = romanExpressionBuilder;
         this.romanToCreditsCalculator = romanToCreditsCalculator;
     }

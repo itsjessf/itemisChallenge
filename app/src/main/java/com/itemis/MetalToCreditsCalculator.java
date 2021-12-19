@@ -6,10 +6,10 @@ public class MetalToCreditsCalculator {
 
 
     private final RomanToCreditsCalculator romanToCreditsCalculator;
-    private final RomanExpressionBuilder romanExpressionBuilder;
+    private final GalacticToRomanExpressionMapper romanExpressionBuilder;
     private final MetalCreditsRepository metalCreditsRepository;
 
-    public MetalToCreditsCalculator(RomanToCreditsCalculator romanToCreditsCalculator, RomanExpressionBuilder romanExpressionBuilder, MetalCreditsRepository metalCreditsRepository) {
+    public MetalToCreditsCalculator(RomanToCreditsCalculator romanToCreditsCalculator, GalacticToRomanExpressionMapper romanExpressionBuilder, MetalCreditsRepository metalCreditsRepository) {
         this.romanToCreditsCalculator = romanToCreditsCalculator;
         this.romanExpressionBuilder = romanExpressionBuilder;
         this.metalCreditsRepository = metalCreditsRepository;

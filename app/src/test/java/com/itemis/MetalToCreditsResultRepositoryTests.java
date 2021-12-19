@@ -10,7 +10,7 @@ public class MetalToCreditsResultRepositoryTests {
 
     @Before
     public void beforeEach(){
-        metalToCreditsResultRepository = new MetalToCreditsResultRepository( new MetalToCreditsCalculator(new RomanToCreditsCalculator(), new RomanExpressionBuilder( new GalacticRomanRepository()), new MetalCreditsRepository(new RomanToCreditsCalculator(), new RomanExpressionBuilder(new GalacticRomanRepository()))));
+        metalToCreditsResultRepository = new MetalToCreditsResultRepository( new MetalToCreditsCalculator(new RomanToCreditsCalculator(), new GalacticToRomanExpressionMapper( new GalacticRomanRepository()), new MetalCreditsRepository(new RomanToCreditsCalculator(), new GalacticToRomanExpressionMapper(new GalacticRomanRepository()))));
     }
 
     @Test

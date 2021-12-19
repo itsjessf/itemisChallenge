@@ -1,9 +1,9 @@
 package com.itemis;
 
-public class RomanExpressionBuilder {
+public class GalacticToRomanExpressionMapper {
     private final GalacticRomanRepository galacticRomanRepository;
 
-    public RomanExpressionBuilder(GalacticRomanRepository galacticRomanRepository) {
+    public GalacticToRomanExpressionMapper(GalacticRomanRepository galacticRomanRepository) {
         this.galacticRomanRepository = galacticRomanRepository;
     }
 

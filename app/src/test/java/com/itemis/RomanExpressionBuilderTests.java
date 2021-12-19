@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class RomanExpressionBuilderTests {
 
-    RomanExpressionBuilder romanExpressionBuilder;
+    GalacticToRomanExpressionMapper romanExpressionBuilder;
 
     @Before
     public void beforeEach() {
@@ -23,7 +23,7 @@ public class RomanExpressionBuilderTests {
         galacticRomanRepository.storeGalacticRomanValues("cento","C");
         galacticRomanRepository.storeGalacticRomanValues("daemos","D");
         galacticRomanRepository.storeGalacticRomanValues("mili","M");
-        romanExpressionBuilder = new RomanExpressionBuilder(galacticRomanRepository);
+        romanExpressionBuilder = new GalacticToRomanExpressionMapper(galacticRomanRepository);
     }
 
     @Test

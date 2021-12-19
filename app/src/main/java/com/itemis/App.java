@@ -11,7 +11,7 @@ public class App {
     public static void main(String[] args) {
 
 
-        RomanExpressionBuilder romanExpressionBuilder = new RomanExpressionBuilder(
+        GalacticToRomanExpressionMapper romanExpressionBuilder = new GalacticToRomanExpressionMapper(
                 new GalacticRomanRepository());
 
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
@@ -26,6 +26,8 @@ public class App {
                 romanExpressionBuilder,
                 new RomanToCreditsCalculator());
 
+        GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
+
         GalacticToCreditsResultRepository galacticToCreditsResultRepository = new GalacticToCreditsResultRepository(galacticToCreditsCalculator);
 
         MetalToCreditsResultRepository metalToCreditsResultRepository = new MetalToCreditsResultRepository(metalToCreditsCalculator);
@@ -35,13 +37,13 @@ public class App {
         InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(resultDisplayer);
 
         UserInputHandler userInputHandler = new UserInputHandler(
-                new GalacticRomanRepository(),
+                galacticRomanRepository,
                 metalCreditsRepository,
                 galacticToCreditsResultRepository,
                 metalToCreditsResultRepository,
                 invalidQueryHandler,
                 romanExpressionBuilder,
-                new RomanToCreditsCalculator());
+                new RomanToCreditsCalculator(), new MetalService(metalCreditsRepository, galacticRomanRepository));
 
         UserInputReader userInputReader = new UserInputReader(
                 new Scanner(System.in),

@@ -1,15 +1,14 @@
 package com.itemis;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MetalCreditsRepository {
     private static final Map<String, Float> metalCredits = new HashMap<>();
     private final RomanToCreditsCalculator romanToCreditsCalculator;
-    private final RomanExpressionBuilder romanExpressionBuilder;
+    private final GalacticToRomanExpressionMapper romanExpressionBuilder;
 
-    public MetalCreditsRepository( RomanToCreditsCalculator romanToCreditsCalculator, RomanExpressionBuilder romanExpressionBuilder) {
+    public MetalCreditsRepository( RomanToCreditsCalculator romanToCreditsCalculator, GalacticToRomanExpressionMapper romanExpressionBuilder) {
         this.romanToCreditsCalculator = romanToCreditsCalculator;
         this.romanExpressionBuilder = romanExpressionBuilder;
     }

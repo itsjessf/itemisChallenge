@@ -5,16 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashMap;
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MetalCreditsRepositoryTests {
     private MetalCreditsRepository metalCreditsRepository;
     private RomanToCreditsCalculator romanToCreditsCalculator;
-    private RomanExpressionBuilder romanExpressionBuilder;
+    private GalacticToRomanExpressionMapper romanExpressionBuilder;
 
 
     @Before
@@ -27,7 +24,7 @@ public class MetalCreditsRepositoryTests {
         galacticRomanRepository.storeGalacticRomanValues("cento","C");
         galacticRomanRepository.storeGalacticRomanValues("daemos","D");
         galacticRomanRepository.storeGalacticRomanValues("mili","M");
-        romanExpressionBuilder = new RomanExpressionBuilder(galacticRomanRepository);
+        romanExpressionBuilder = new GalacticToRomanExpressionMapper(galacticRomanRepository);
         metalCreditsRepository = new MetalCreditsRepository(romanToCreditsCalculator, romanExpressionBuilder);
     }
 
