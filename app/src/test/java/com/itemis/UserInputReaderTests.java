@@ -3,13 +3,13 @@ package com.itemis;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -18,45 +18,48 @@ public class UserInputReaderTests {
     @Mock
     private Scanner scanner;
 
-    private UserInputHandler userInputHandler;
-    @Mock
-    private ResultDisplayer resultDisplayer;
+    private GalacticRomanRepository galacticRomanRepository;
+
     @Mock
     private PrintStream consoleOutput;
-    @InjectMocks
     private UserInputReader userInputReader;
 
     @Before
-    public void beforeEach() {
-        GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
+    public void before() {
+
+
+        galacticRomanRepository = new GalacticRomanRepository();
         GalacticToRomanExpressionMapper galacticToRomanExpressionMapper = new GalacticToRomanExpressionMapper(
                 galacticRomanRepository);
+        RomanToCreditsCalculator romanToCreditsCalculator = new RomanToCreditsCalculator(new InvalidQueryHandler(new AnswersRepository()));
 
 
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
-                new RomanToCreditsCalculator(),
+                romanToCreditsCalculator,
                 galacticToRomanExpressionMapper);
 
         AnswersRepository answersRepository = new AnswersRepository();
-
+        ResultDisplayer resultDisplayer = new ResultDisplayer(answersRepository);
         InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(answersRepository);
 
         MetalService metalService = new MetalService(metalCreditsRepository,
                 galacticRomanRepository,
                 galacticToRomanExpressionMapper,
-                new RomanToCreditsCalculator(),
+                romanToCreditsCalculator,
                 answersRepository);
 
         GalacticService galacticService = new GalacticService(galacticRomanRepository,
-                new RomanToCreditsCalculator(),
+                romanToCreditsCalculator,
                 galacticToRomanExpressionMapper,
                 answersRepository);
 
-        userInputHandler = new UserInputHandler(
+        UserInputHandler userInputHandler = new UserInputHandler(
                 galacticRomanRepository,
                 invalidQueryHandler,
                 metalService,
                 galacticService);
+
+        userInputReader = new UserInputReader(scanner, userInputHandler, resultDisplayer, consoleOutput);
     }
 
 
@@ -87,19 +90,12 @@ public class UserInputReaderTests {
     }
 
     @Test
-    public void whenUserInputIsValid_ShouldCallUserInputHandler(){
+    public void whenUserInputIsValid_ShouldBeProcessedCorrectly(){
         when(this.scanner.hasNextLine()).thenReturn(true);
         when(this.scanner.nextLine()).thenReturn("blob is I").thenReturn("exit");
         userInputReader.readUserInput();
-        verify(this.userInputHandler, times(1)).handleUserInput("blob is I");
+        assertEquals("I", galacticRomanRepository.getGalacticRomanValues("blob"));
     }
 
-    @Test
-    public void whenConsoleIsClosed_ShouldCallResultDisplayer() {
-        when(this.scanner.hasNextLine()).thenReturn(true);
-        when(this.scanner.nextLine()).thenReturn("exit");
-        userInputReader.readUserInput();
-        verify(this.resultDisplayer, times(1)).displayResult();
-    }
 
 }

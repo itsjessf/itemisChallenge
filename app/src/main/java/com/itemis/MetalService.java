@@ -24,6 +24,7 @@ public class MetalService {
         doesGalacticExist(galacticElements);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
         int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
+        if(metalQuantity == 0){return;}
         float metalValue = (float)credits/metalQuantity;
         metalCreditsRepository.storeMetalCreditValues(metal, metalValue);
     }
@@ -38,6 +39,7 @@ public class MetalService {
         doesMetalExist(metal);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
         int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
+        if(metalQuantity == 0){return;}
         float metalValue = metalCreditsRepository.getMetalCredits(metal);
         float result = metalQuantity * metalValue;
         String answer = buildStringResult(galacticElements, metal, (int)result);

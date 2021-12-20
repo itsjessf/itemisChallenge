@@ -28,6 +28,7 @@ public class GalacticService {
         doesGalacticExist(galacticElements);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
         int galacticCreditsValue = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
+        if(galacticCreditsValue == 0){return;}
         String answer = buildStringResult(galacticElements, galacticCreditsValue);
         addResult(answer);
     }
@@ -42,7 +43,7 @@ public class GalacticService {
 
     private String buildStringResult(List<String> galacticElements, int galacticCreditsValue) {
         String galactic = String.join(" ", galacticElements);
-        return galactic.concat("is ").concat(String.valueOf(galacticCreditsValue));
+        return galactic.concat(" is ").concat(String.valueOf(galacticCreditsValue));
     }
 
     private void addResult(String answer) {

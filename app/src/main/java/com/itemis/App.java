@@ -12,35 +12,25 @@ public class App {
         GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
         GalacticToRomanExpressionMapper galacticToRomanExpressionMapper = new GalacticToRomanExpressionMapper(
                 galacticRomanRepository);
-
-
-        MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
-                new RomanToCreditsCalculator(),
-                galacticToRomanExpressionMapper);
-
-        MetalToCreditsCalculator metalToCreditsCalculator = new MetalToCreditsCalculator(
-                new RomanToCreditsCalculator(),
-                galacticToRomanExpressionMapper, metalCreditsRepository);
-
-        GalacticToCreditsCalculator galacticToCreditsCalculator = new GalacticToCreditsCalculator(
-                galacticToRomanExpressionMapper,
-                new RomanToCreditsCalculator());
-
         AnswersRepository answersRepository = new AnswersRepository();
+        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(answersRepository);
+        RomanToCreditsCalculator romanToCreditsCalculator = new RomanToCreditsCalculator(invalidQueryHandler);
+        MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
+                romanToCreditsCalculator,
+                galacticToRomanExpressionMapper);
 
 
         ResultDisplayer resultDisplayer = new ResultDisplayer(answersRepository);
 
-        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(answersRepository);
 
         MetalService metalService = new MetalService(metalCreditsRepository,
                 galacticRomanRepository,
                 galacticToRomanExpressionMapper,
-                new RomanToCreditsCalculator(),
+                romanToCreditsCalculator,
                 answersRepository);
 
         GalacticService galacticService = new GalacticService(galacticRomanRepository,
-                new RomanToCreditsCalculator(),
+                romanToCreditsCalculator,
                 galacticToRomanExpressionMapper,
                 answersRepository);
 

@@ -6,6 +6,12 @@ import java.util.List;
 
 public class RomanToCreditsCalculator {
 
+    InvalidQueryHandler invalidQueryHandler;
+
+    public RomanToCreditsCalculator(InvalidQueryHandler invalidQueryHandler) {
+        this.invalidQueryHandler = invalidQueryHandler;
+    }
+
     private static final HashMap<String, Integer> romanToCreditsMap = new HashMap<>() {{
         put("I", 1);
         put("V", 5);
@@ -25,30 +31,34 @@ public class RomanToCreditsCalculator {
         for (i = 0; i < romanExpression.size(); i++) {
             try {
                 if (i + 1 == romanExpression.size()) {
-                    if(isForthIteration(romanExpression, i)){
-                        result = 0;
-                        break;
+                    if (isForthIteration(romanExpression, i)) {
+                        throw new HandledException();
                     }
                     result = result + romanToCreditsMap.get(romanExpression.get(i));
-                } else if (romanToCreditsMap.get(romanExpression.get(i)) < romanToCreditsMap.get(romanExpression.get(i+1)) && isValueSubtractable(romanExpression.get(i), romanExpression.get(i + 1))) {
+
+                } else if (romanToCreditsMap.get(romanExpression.get(i)) < romanToCreditsMap.get(romanExpression.get(i + 1)) && isValueSubtractable(romanExpression.get(i), romanExpression.get(i + 1))) {
                     //Next  value is higher and subtractable
                     result = result + subtractValue(romanExpression, i);
                     i = i + 1;
+
                 } else if (romanToCreditsMap.get(romanExpression.get(i)) > romanToCreditsMap.get(romanExpression.get(i + 1))) {
                     //Next value is lower
                     result = result + romanToCreditsMap.get(romanExpression.get(i));
+
                 } else if (romanToCreditsMap.get(romanExpression.get(i)) == romanToCreditsMap.get(romanExpression.get(i + 1)) && isValueRepeatable(romanExpression.get(i)) && !isForthIteration(romanExpression, i)) {
                     //Next value is the same
                     result = result + romanToCreditsMap.get(romanExpression.get(i));
                 } else {
-                    //String is not valid
-                    System.out.println("The Roman Expression provided is not valid");
-                    return 0;
+                    throw new HandledException();
                 }
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                break;
+                return 0;
+            } catch (HandledException exception) {
+                invalidQueryHandler.addInvalidQueryToResult(exception.getMessage());
+                return 0;
             }
+
         }
         return result;
     }
@@ -76,7 +86,7 @@ public class RomanToCreditsCalculator {
 
     private static boolean isForthIteration(List<String> romanExpression, int i) {
         if (i >= 3) {
-            return (romanExpression.get(i).equals(romanExpression.get(i-1)) && romanExpression.get(i).equals(romanExpression.get(i-2)) && romanExpression.get(i).equals(romanExpression.get(i-3)));
+            return (romanExpression.get(i).equals(romanExpression.get(i - 1)) && romanExpression.get(i).equals(romanExpression.get(i - 2)) && romanExpression.get(i).equals(romanExpression.get(i - 3)));
         }
         return false;
     }

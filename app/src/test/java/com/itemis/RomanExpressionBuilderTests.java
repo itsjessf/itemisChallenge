@@ -2,16 +2,15 @@ package com.itemis;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
 public class RomanExpressionBuilderTests {
 
-    GalacticToRomanExpressionMapper romanExpressionBuilder;
+    GalacticToRomanExpressionMapper galacticToRomanExpressionMapper;
 
     @Before
     public void beforeEach() {
@@ -23,13 +22,14 @@ public class RomanExpressionBuilderTests {
         galacticRomanRepository.storeGalacticRomanValues("cento","C");
         galacticRomanRepository.storeGalacticRomanValues("daemos","D");
         galacticRomanRepository.storeGalacticRomanValues("mili","M");
-        romanExpressionBuilder = new GalacticToRomanExpressionMapper(galacticRomanRepository);
+        galacticToRomanExpressionMapper = new GalacticToRomanExpressionMapper(galacticRomanRepository);
     }
 
     @Test
     public void testCreateRomanExpressionWithGalacticValues() {
-        assertArrayEquals(new String[]{"M", "M", "C", "C", "X", "X","I"}, romanExpressionBuilder.buildRomanExpression(new String[]{"mili", "mili", "cento", "cento", "pish", "pish", "glob"}));
-        assertArrayEquals(new String[]{"M", "M"}, romanExpressionBuilder.buildRomanExpression(new String[]{"mili", "mili"}));
+        List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(Arrays.asList("mili", "mili", "cento", "cento", "pish", "pish", "glob"));
+        assertEquals(Arrays.asList("M", "M", "C", "C", "X", "X","I"), romanExpression);
     }
+
 
 }

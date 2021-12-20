@@ -1,7 +1,6 @@
 package com.itemis;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
@@ -27,14 +26,14 @@ public class UserInputHandler {
     public void handleUserInput(String userInput) {
 
         try {
-            if (hasMatchingRegex("^\\w+ is [IVXLCDM]$", userInput)) {
-                String[] userInputElements = userInput.split(" ");
-                this.galacticRomanRepository.storeGalacticRomanValues(userInputElements[0], userInputElements[2]);
+            if (hasMatchingRegex("^\\s*\\w+\\s*is\\s* [IVXLCDM]\\s*$", userInput)) {
+                List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
+                this.galacticRomanRepository.storeGalacticRomanValues(userElements.get(0), userElements.get(2));
                 return;
             }
 
-            if (hasMatchingRegex(" is \\d+ Credits$", userInput)) {
-                List<String> userElements = Arrays.asList(userInput.split(" "));
+            if (hasMatchingRegex("\s*is\s*\\d+\s*Credits$", userInput)) {
+                List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
                 List<String> galacticElements = userElements.subList(0, userElements.size() - 4);
                 String metal = userElements.get(userElements.size() - 4);
                 int credits = parseInt(userElements.get(userElements.size() - 2));
@@ -44,8 +43,8 @@ public class UserInputHandler {
                 return;
             }
 
-            if (hasMatchingRegex("^How much is ", userInput)) {
-                List<String> userElements = Arrays.asList(userInput.split(" "));
+            if (hasMatchingRegex("^\s*How\s*much\s*is\s*", userInput)) {
+                List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
                 List<String> galacticElements = userElements.subList(3, userElements.size());
                 galacticService.x(galacticElements);
 
@@ -53,8 +52,8 @@ public class UserInputHandler {
                 return;
             }
 
-            if (hasMatchingRegex("^How many Credits is ", userInput)) {
-                List<String> userElements = Arrays.asList(userInput.split(" "));
+            if (hasMatchingRegex("^\s*How\s*many\s*Credits\s*is\s*", userInput)) {
+                List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
                 List<String> galacticElements = userElements.subList(4, userElements.size()-1);
                 String metal = userElements.get(userElements.size()-1);
                 metalService.y(galacticElements, metal);
@@ -75,14 +74,13 @@ public class UserInputHandler {
         return Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(sentence).find();
     }
 
-   /* private float calculateMetalCredits(String[] userInputElements){
-        String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements, 0, userInputElements.length-4));
-        int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
-        int metalValue = parseInt(userInputElements[userInputElements.length-2]);
-        return (float)metalValue/metalQuantity;
-    }*/
-    // if two words separated by "is"
-    // if sentence ends with "is" \number\ "Credits"
-    // if sentence starts with "How much is"
-    // if sentence starts with "How many credits is"
+    private List<String> removeEmptySpaces(List<String> userInput){
+        List<String> noSpacesUserInput = new ArrayList<>();
+        for (String s : userInput){
+            if(s.equals("")){continue;}
+            noSpacesUserInput.add(s);
+        }
+        return noSpacesUserInput;
+    }
+
 }
