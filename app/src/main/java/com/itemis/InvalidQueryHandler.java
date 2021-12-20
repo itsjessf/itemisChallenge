@@ -1,13 +1,13 @@
 package com.itemis;
 
 public class InvalidQueryHandler {
-    private ResultDisplayer resultDisplayer;
+    private AnswersRepository answersRepository;
 
-    public InvalidQueryHandler(ResultDisplayer resultDisplayer) {
-        this.resultDisplayer = resultDisplayer;
+    public InvalidQueryHandler(AnswersRepository answersRepository) {
+        this.answersRepository = answersRepository;
     }
 
     public void addInvalidQueryToResult(String message) {
-        resultDisplayer.addResult(message);
+        answersRepository.addAnswer(message);
     }
 }

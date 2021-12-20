@@ -1,37 +1,27 @@
 package com.itemis;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.parseInt;
 
 public class UserInputHandler {
 
     private final GalacticRomanRepository galacticRomanRepository;
-    private final MetalCreditsRepository metalCreditsRepository;
-    private final GalacticToCreditsResultRepository galacticToCreditsResultRepository;
-    private final MetalToCreditsResultRepository metalToCreditsResultRepository;
     private final InvalidQueryHandler invalidQueryHandler;
-    private final GalacticToRomanExpressionMapper romanExpressionBuilder;
-    private final RomanToCreditsCalculator romanToCreditsCalculator;
     private final MetalService metalService;
+    private final GalacticService galacticService;
 
     public UserInputHandler(GalacticRomanRepository galacticRomanRepository,
-                            MetalCreditsRepository metalCreditsRepository,
-                            GalacticToCreditsResultRepository galacticToCreditsResultRepository,
-                            MetalToCreditsResultRepository metalToCreditsResultRepository,
                             InvalidQueryHandler invalidQueryHandler,
-    GalacticToRomanExpressionMapper romanExpressionBuilder,
-                            RomanToCreditsCalculator romanToCreditsCalculator,
-    MetalService metalService) {
+                            MetalService metalService,
+                            GalacticService galacticService) {
 
         this.galacticRomanRepository = galacticRomanRepository;
-        this.metalCreditsRepository = metalCreditsRepository;
-        this.galacticToCreditsResultRepository = galacticToCreditsResultRepository;
-        this.metalToCreditsResultRepository = metalToCreditsResultRepository;
         this.invalidQueryHandler = invalidQueryHandler;
-        this.romanExpressionBuilder = romanExpressionBuilder;
-        this.romanToCreditsCalculator = romanToCreditsCalculator;
         this.metalService = metalService;
+        this.galacticService = galacticService;
     }
 
     public void handleUserInput(String userInput) {
@@ -44,25 +34,36 @@ public class UserInputHandler {
             }
 
             if (hasMatchingRegex(" is \\d+ Credits$", userInput)) {
-                String[] userInputElements = userInput.split(" ");
-                String metal = userInputElements[userInputElements.length - 4];
-                metalService.x(Collections.singletonList("glob"), "Silver", 2);
-                this.metalCreditsRepository.storeMetalCreditValues(metal, calculateMetalCredits(userInputElements));
+                List<String> userElements = Arrays.asList(userInput.split(" "));
+                List<String> galacticElements = userElements.subList(0, userElements.size() - 4);
+                String metal = userElements.get(userElements.size() - 4);
+                int credits = parseInt(userElements.get(userElements.size() - 2));
+                metalService.x(galacticElements, metal, credits);
+
+                //this.metalCreditsRepository.storeMetalCreditValues(metal, calculateMetalCredits(userInputElements));
                 return;
             }
 
             if (hasMatchingRegex("^How much is ", userInput)) {
-                this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
+                List<String> userElements = Arrays.asList(userInput.split(" "));
+                List<String> galacticElements = userElements.subList(3, userElements.size());
+                galacticService.x(galacticElements);
+
+                //this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
                 return;
             }
 
             if (hasMatchingRegex("^How many Credits is ", userInput)) {
-                this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
+                List<String> userElements = Arrays.asList(userInput.split(" "));
+                List<String> galacticElements = userElements.subList(4, userElements.size()-1);
+                String metal = userElements.get(userElements.size()-1);
+                metalService.y(galacticElements, metal);
+                //this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
                 return;
             }
             throw new HandledException();
 
-        } catch(HandledException exception){
+        } catch (HandledException exception) {
             //Add to answers repository exception.getMessage()
             this.invalidQueryHandler.addInvalidQueryToResult(exception.getMessage());
         }
@@ -74,12 +75,12 @@ public class UserInputHandler {
         return Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(sentence).find();
     }
 
-    private float calculateMetalCredits(String[] userInputElements){
+   /* private float calculateMetalCredits(String[] userInputElements){
         String[] romanExpression = romanExpressionBuilder.buildRomanExpression(Arrays.copyOfRange(userInputElements, 0, userInputElements.length-4));
         int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
-        int metalValue = Integer.parseInt(userInputElements[userInputElements.length-2]);
+        int metalValue = parseInt(userInputElements[userInputElements.length-2]);
         return (float)metalValue/metalQuantity;
-    }
+    }*/
     // if two words separated by "is"
     // if sentence ends with "is" \number\ "Credits"
     // if sentence starts with "How much is"

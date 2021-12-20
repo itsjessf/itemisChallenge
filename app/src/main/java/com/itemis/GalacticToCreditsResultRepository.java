@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class GalacticToCreditsResultRepository {
 
-    private final GalacticToCreditsCalculator galacticToCreditsCalculator;
+   /* private final GalacticToCreditsCalculator galacticToCreditsCalculator;
     private final ArrayList<String> galacticToCreditsResult = new ArrayList<String>();
 
     public GalacticToCreditsResultRepository(GalacticToCreditsCalculator galacticToCreditsCalculator) {
@@ -31,5 +31,5 @@ public class GalacticToCreditsResultRepository {
 
     public ArrayList<String> getGalacticToCreditsResult() {
         return galacticToCreditsResult;
-    }
+    }*/
 }

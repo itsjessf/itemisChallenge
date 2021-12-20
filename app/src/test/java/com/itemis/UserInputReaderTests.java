@@ -28,34 +28,35 @@ public class UserInputReaderTests {
 
     @Before
     public void beforeEach() {
-        GalacticToRomanExpressionMapper romanExpressionBuilder = new GalacticToRomanExpressionMapper(
-                new GalacticRomanRepository());
+        GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
+        GalacticToRomanExpressionMapper galacticToRomanExpressionMapper = new GalacticToRomanExpressionMapper(
+                galacticRomanRepository);
+
 
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
                 new RomanToCreditsCalculator(),
-                romanExpressionBuilder);
+                galacticToRomanExpressionMapper);
 
-        GalacticToCreditsCalculator galacticToCreditsCalculator = new GalacticToCreditsCalculator(
-                romanExpressionBuilder,
-                new RomanToCreditsCalculator());
+        AnswersRepository answersRepository = new AnswersRepository();
 
-        MetalToCreditsCalculator metalToCreditsCalculator = new MetalToCreditsCalculator(
+        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(answersRepository);
+
+        MetalService metalService = new MetalService(metalCreditsRepository,
+                galacticRomanRepository,
+                galacticToRomanExpressionMapper,
                 new RomanToCreditsCalculator(),
-                romanExpressionBuilder, metalCreditsRepository);
-        GalacticToCreditsResultRepository galacticToCreditsResultRepository = new GalacticToCreditsResultRepository(galacticToCreditsCalculator);
+                answersRepository);
 
-        MetalToCreditsResultRepository metalToCreditsResultRepository = new MetalToCreditsResultRepository(metalToCreditsCalculator);
-
-        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(new ResultDisplayer(galacticToCreditsResultRepository, metalToCreditsResultRepository));
+        GalacticService galacticService = new GalacticService(galacticRomanRepository,
+                new RomanToCreditsCalculator(),
+                galacticToRomanExpressionMapper,
+                answersRepository);
 
         userInputHandler = new UserInputHandler(
-                new GalacticRomanRepository(),
-                metalCreditsRepository,
-                galacticToCreditsResultRepository,
-                metalToCreditsResultRepository,
+                galacticRomanRepository,
                 invalidQueryHandler,
-                romanExpressionBuilder,
-                new RomanToCreditsCalculator());
+                metalService,
+                galacticService);
     }
 
 

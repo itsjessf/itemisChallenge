@@ -9,41 +9,46 @@ import java.util.Scanner;
 public class App {
 
     public static void main(String[] args) {
+        GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
+        GalacticToRomanExpressionMapper galacticToRomanExpressionMapper = new GalacticToRomanExpressionMapper(
+                galacticRomanRepository);
 
-
-        GalacticToRomanExpressionMapper romanExpressionBuilder = new GalacticToRomanExpressionMapper(
-                new GalacticRomanRepository());
 
         MetalCreditsRepository metalCreditsRepository = new MetalCreditsRepository(
                 new RomanToCreditsCalculator(),
-                romanExpressionBuilder);
+                galacticToRomanExpressionMapper);
 
         MetalToCreditsCalculator metalToCreditsCalculator = new MetalToCreditsCalculator(
                 new RomanToCreditsCalculator(),
-                romanExpressionBuilder, metalCreditsRepository);
+                galacticToRomanExpressionMapper, metalCreditsRepository);
 
         GalacticToCreditsCalculator galacticToCreditsCalculator = new GalacticToCreditsCalculator(
-                romanExpressionBuilder,
+                galacticToRomanExpressionMapper,
                 new RomanToCreditsCalculator());
 
-        GalacticRomanRepository galacticRomanRepository = new GalacticRomanRepository();
+        AnswersRepository answersRepository = new AnswersRepository();
 
-        GalacticToCreditsResultRepository galacticToCreditsResultRepository = new GalacticToCreditsResultRepository(galacticToCreditsCalculator);
 
-        MetalToCreditsResultRepository metalToCreditsResultRepository = new MetalToCreditsResultRepository(metalToCreditsCalculator);
+        ResultDisplayer resultDisplayer = new ResultDisplayer(answersRepository);
 
-        ResultDisplayer resultDisplayer = new ResultDisplayer(galacticToCreditsResultRepository, metalToCreditsResultRepository);
+        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(answersRepository);
 
-        InvalidQueryHandler invalidQueryHandler = new InvalidQueryHandler(resultDisplayer);
+        MetalService metalService = new MetalService(metalCreditsRepository,
+                galacticRomanRepository,
+                galacticToRomanExpressionMapper,
+                new RomanToCreditsCalculator(),
+                answersRepository);
+
+        GalacticService galacticService = new GalacticService(galacticRomanRepository,
+                new RomanToCreditsCalculator(),
+                galacticToRomanExpressionMapper,
+                answersRepository);
 
         UserInputHandler userInputHandler = new UserInputHandler(
                 galacticRomanRepository,
-                metalCreditsRepository,
-                galacticToCreditsResultRepository,
-                metalToCreditsResultRepository,
                 invalidQueryHandler,
-                romanExpressionBuilder,
-                new RomanToCreditsCalculator(), new MetalService(metalCreditsRepository, galacticRomanRepository));
+                metalService,
+                galacticService);
 
         UserInputReader userInputReader = new UserInputReader(
                 new Scanner(System.in),
@@ -52,5 +57,6 @@ public class App {
                 new PrintStream(System.out));
 
         userInputReader.readUserInput();
+
     }
 }

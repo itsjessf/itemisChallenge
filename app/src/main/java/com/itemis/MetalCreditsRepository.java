@@ -19,7 +19,11 @@ public class MetalCreditsRepository {
 
 
 
-    public float getMetalCredits( String metal) {
+    public float getMetalCredits(String metal) {
         return metalCredits.get(metal);
+    }
+
+    public boolean isMetal ( String metal){
+        return metalCredits.containsKey(metal);
     }
 }

@@ -1,6 +1,7 @@
 package com.itemis;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 public class RomanToCreditsCalculator {
@@ -16,29 +17,29 @@ public class RomanToCreditsCalculator {
 
     }};
 
-    public int calculateRomanToCredits(String[] romanExpression) {
+    public int calculateRomanToCredits(List<String> romanExpression) {
 
         int result = 0;
         int i = 0;
 
-        for (i = 0; i < romanExpression.length; i++) {
+        for (i = 0; i < romanExpression.size(); i++) {
             try {
-                if (i + 1 == romanExpression.length) {
+                if (i + 1 == romanExpression.size()) {
                     if(isForthIteration(romanExpression, i)){
                         result = 0;
                         break;
                     }
-                    result = result + romanToCreditsMap.get(romanExpression[i]);
-                } else if (romanToCreditsMap.get(romanExpression[i]) < romanToCreditsMap.get(romanExpression[i + 1]) && isValueSubtractable(romanExpression[i], romanExpression[i + 1])) {
+                    result = result + romanToCreditsMap.get(romanExpression.get(i));
+                } else if (romanToCreditsMap.get(romanExpression.get(i)) < romanToCreditsMap.get(romanExpression.get(i+1)) && isValueSubtractable(romanExpression.get(i), romanExpression.get(i + 1))) {
                     //Next  value is higher and subtractable
                     result = result + subtractValue(romanExpression, i);
                     i = i + 1;
-                } else if (romanToCreditsMap.get(romanExpression[i]) > romanToCreditsMap.get(romanExpression[i + 1])) {
+                } else if (romanToCreditsMap.get(romanExpression.get(i)) > romanToCreditsMap.get(romanExpression.get(i + 1))) {
                     //Next value is lower
-                    result = result + romanToCreditsMap.get(romanExpression[i]);
-                } else if (romanToCreditsMap.get(romanExpression[i]) == romanToCreditsMap.get(romanExpression[i + 1]) && isValueRepeatable(romanExpression[i]) && !isForthIteration(romanExpression, i)) {
+                    result = result + romanToCreditsMap.get(romanExpression.get(i));
+                } else if (romanToCreditsMap.get(romanExpression.get(i)) == romanToCreditsMap.get(romanExpression.get(i + 1)) && isValueRepeatable(romanExpression.get(i)) && !isForthIteration(romanExpression, i)) {
                     //Next value is the same
-                    result = result + romanToCreditsMap.get(romanExpression[i]);
+                    result = result + romanToCreditsMap.get(romanExpression.get(i));
                 } else {
                     //String is not valid
                     System.out.println("The Roman Expression provided is not valid");
@@ -69,13 +70,13 @@ public class RomanToCreditsCalculator {
         return romanValue.equals("I") || romanValue.equals("X") || romanValue.equals("C") || romanValue.equals("M");
     }
 
-    private static int subtractValue(String[] romanExpression, int i) {
-        return (romanToCreditsMap.get(romanExpression[i + 1])) - (romanToCreditsMap.get(romanExpression[i]));
+    private static int subtractValue(List<String> romanExpression, int i) {
+        return (romanToCreditsMap.get(romanExpression.get(i + 1))) - (romanToCreditsMap.get(romanExpression.get(i)));
     }
 
-    private static boolean isForthIteration(String[] romanExpression, int i) {
+    private static boolean isForthIteration(List<String> romanExpression, int i) {
         if (i >= 3) {
-            return (romanExpression[i].equals(romanExpression[i - 1]) && romanExpression[i].equals(romanExpression[i - 2]) && romanExpression[i].equals(romanExpression[i - 3]));
+            return (romanExpression.get(i).equals(romanExpression.get(i-1)) && romanExpression.get(i).equals(romanExpression.get(i-2)) && romanExpression.get(i).equals(romanExpression.get(i-3)));
         }
         return false;
     }

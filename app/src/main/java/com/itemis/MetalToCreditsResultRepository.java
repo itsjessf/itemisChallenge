@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MetalToCreditsResultRepository {
 
-    private final MetalToCreditsCalculator metalToCreditsCalculator;
+   /* private final MetalToCreditsCalculator metalToCreditsCalculator;
     private final ArrayList<String> metalToCreditsResult = new ArrayList<>();
 
     public MetalToCreditsResultRepository(MetalToCreditsCalculator metalToCreditsCalculator) {
@@ -31,5 +31,5 @@ public class MetalToCreditsResultRepository {
 
     public ArrayList<String> getGalacticToCreditsResult() {
         return metalToCreditsResult;
-    }
+    }*/
 }
