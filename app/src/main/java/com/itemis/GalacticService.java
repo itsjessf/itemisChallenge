@@ -20,11 +20,7 @@ public class GalacticService {
         this.answersRepository = answersRepository;
     }
 
-    public void x(List<String> galacticElements) throws HandledException {
-        //C hecks if galactic exists
-        // calculates galactic expression value
-        // builds string to store in answers
-        // stores string in answers
+    public void handleGalacticElements(List<String> galacticElements) throws HandledException {
         doesGalacticExist(galacticElements);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
         int galacticCreditsValue = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
@@ -34,8 +30,8 @@ public class GalacticService {
     }
 
     private void doesGalacticExist(List<String> galacticElements) throws HandledException {
-        for (int i = 0; i < galacticElements.size(); i++) {
-            if (galacticRomanRepository.getGalacticRomanValues(galacticElements.get(i)) == null) {
+        for (String galacticElement : galacticElements) {
+            if (galacticRomanRepository.getGalacticRomanValues(galacticElement) == null) {
                 throw new HandledException();
             }
         }

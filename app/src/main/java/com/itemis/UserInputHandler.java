@@ -37,7 +37,7 @@ public class UserInputHandler {
                 List<String> galacticElements = userElements.subList(0, userElements.size() - 4);
                 String metal = userElements.get(userElements.size() - 4);
                 int credits = parseInt(userElements.get(userElements.size() - 2));
-                metalService.x(galacticElements, metal, credits);
+                metalService.storeMetalElements(galacticElements, metal, credits);
 
                 //this.metalCreditsRepository.storeMetalCreditValues(metal, calculateMetalCredits(userInputElements));
                 return;
@@ -46,7 +46,7 @@ public class UserInputHandler {
             if (hasMatchingRegex("^\s*How\s*much\s*is\s*", userInput)) {
                 List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
                 List<String> galacticElements = userElements.subList(3, userElements.size());
-                galacticService.x(galacticElements);
+                galacticService.handleGalacticElements(galacticElements);
 
                 //this.galacticToCreditsResultRepository.storeGalacticToCreditsResult(userInput);
                 return;
@@ -56,7 +56,7 @@ public class UserInputHandler {
                 List<String> userElements = removeEmptySpaces(Arrays.asList(userInput.split(" ")));
                 List<String> galacticElements = userElements.subList(4, userElements.size()-1);
                 String metal = userElements.get(userElements.size()-1);
-                metalService.y(galacticElements, metal);
+                metalService.handleMetalElements(galacticElements, metal);
                 //this.metalToCreditsResultRepository.storeMetalToCreditsResult(userInput);
                 return;
             }

@@ -3,11 +3,11 @@ package com.itemis;
 import java.util.List;
 
 public class MetalService {
-    private MetalCreditsRepository metalCreditsRepository;
-    private GalacticRomanRepository galacticRomanRepository;
-    private GalacticToRomanExpressionMapper galacticToRomanExpressionMapper;
-    private RomanToCreditsCalculator romanToCreditsCalculator;
-    private AnswersRepository answersRepository;
+    private final MetalCreditsRepository metalCreditsRepository;
+    private final GalacticRomanRepository galacticRomanRepository;
+    private final GalacticToRomanExpressionMapper galacticToRomanExpressionMapper;
+    private final RomanToCreditsCalculator romanToCreditsCalculator;
+    private final AnswersRepository answersRepository;
 
     public MetalService(MetalCreditsRepository metalCreditsRepository, GalacticRomanRepository galacticRomanRepository, GalacticToRomanExpressionMapper galacticToRomanExpressionMapper, RomanToCreditsCalculator romanToCreditsCalculator, AnswersRepository answersRepository) {
         this.metalCreditsRepository = metalCreditsRepository;
@@ -17,10 +17,7 @@ public class MetalService {
         this.answersRepository = answersRepository;
     }
 
-    public void x(List<String> galacticElements, String metal, int credits) throws HandledException {
-        // Verify if galactic value already exists
-        // Calculated metal credits
-        // store metal credits value in repository
+    public void storeMetalElements(List<String> galacticElements, String metal, int credits) throws HandledException {
         doesGalacticExist(galacticElements);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
         int metalQuantity = romanToCreditsCalculator.calculateRomanToCredits(romanExpression);
@@ -29,12 +26,7 @@ public class MetalService {
         metalCreditsRepository.storeMetalCreditValues(metal, metalValue);
     }
 
-    public void y (List<String> galacticElements, String metal) throws HandledException {
-        //Verify if galactic value already exists
-        //Verify if metal exists
-        // calculates galactic expression value
-        // builds string to store in answers
-        //stores string in answers
+    public void handleMetalElements(List<String> galacticElements, String metal) throws HandledException {
         doesGalacticExist(galacticElements);
         doesMetalExist(metal);
         List<String> romanExpression = galacticToRomanExpressionMapper.buildRomanExpression(galacticElements);
@@ -47,8 +39,8 @@ public class MetalService {
     }
 
     private void doesGalacticExist(List<String> galacticElements) throws HandledException {
-        for (int i = 0; i < galacticElements.size(); i++) {
-            if (galacticRomanRepository.getGalacticRomanValues(galacticElements.get(i)) == null) {
+        for (String galacticElement : galacticElements) {
+            if (galacticRomanRepository.getGalacticRomanValues(galacticElement) == null) {
                 throw new HandledException();
             }
         }
